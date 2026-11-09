@@ -172,7 +172,7 @@ svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-l
     <p class="note">Virtual funds only. Prices come from a live market feed; trades settle on the server at expiry. Past results don't predict future ones.</p>
   </div>
 </div>
-<script>window.API_BASE=""; // after deploying the backend, e.g. "https://tradepal.onrender.com"</script>
+<script>window.API_BASE="https://paloption-vncf.onrender.com/"; // after deploying the backend, e.g. "https://tradepal.onrender.com"</script>
 <script>
 const $=id=>document.getElementById(id);let tok=localStorage.tp||sessionStorage.tp,mode='login',cfg,sym,dur=60,pts=[],trades=[];
 const money=n=>'$'+Number(n).toFixed(2);
