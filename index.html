@@ -172,10 +172,18 @@ svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-l
     <p class="note">Virtual funds only. Prices come from a live market feed; trades settle on the server at expiry. Past results don't predict future ones.</p>
   </div>
 </div>
+<script>window.API_BASE=""; // after deploying the backend, e.g. "https://tradepal.onrender.com"</script>
 <script>
 const $=id=>document.getElementById(id);let tok=localStorage.tp||sessionStorage.tp,mode='login',cfg,sym,dur=60,pts=[],trades=[];
 const money=n=>'$'+Number(n).toFixed(2);
-async function api(p,o={}){const r=await fetch('/api'+p,{...o,headers:{'Content-Type':'application/json',...(tok?{Authorization:'Bearer '+tok}:{})},body:o.body?JSON.stringify(o.body):undefined});const j=await r.json().catch(()=>({}));if(r.status===401&&tok&&p!=='/login'){out();}if(!r.ok)throw new Error(j.error||'Request failed');return j}
+const API=(window.API_BASE||'').replace(/\/+$/,'');
+async function api(p,o={}){let r;
+ try{r=await fetch(API+'/api'+p,{...o,headers:{'Content-Type':'application/json',...(tok?{Authorization:'Bearer '+tok}:{})},body:o.body?JSON.stringify(o.body):undefined})}
+ catch{throw new Error("Can't reach the server. Check your connection and the backend address.")}
+ const j=await r.json().catch(()=>null);
+ if(!j)throw new Error(API?'The server sent an unexpected response. Check the backend address.':'No backend found on this site. Set window.API_BASE in index.html to your deployed server.');
+ if(r.status===401&&tok&&p!=='/login'){out();}
+ if(!r.ok)throw new Error(j.error||'Request failed');return j}
 function setMode(m){mode=m;const r=m==='register';
  $('at').textContent=r?'Create account':'Welcome back';
  $('as').textContent=r?'Fill in your details to get started':'Sign in to your account to continue';
@@ -217,7 +225,7 @@ document.querySelector('#auth .lg').style.cursor='pointer';
 document.querySelector('#auth .lg').onclick=()=>{$('auth').classList.add('hide');$('land').classList.remove('hide');loadTicker()};
 function flipTheme(){const l=document.documentElement.dataset.theme!=='light';document.documentElement.dataset.theme=l?'light':'';document.querySelectorAll('.thb use').forEach(u=>u.setAttribute('href',l?'#i-moon':'#i-sun'))}
 document.querySelectorAll('.thb').forEach(b=>b.onclick=flipTheme);
-async function loadTicker(){if($('land').classList.contains('hide'))return;try{const r=await fetch('/api/ticker');if(!r.ok)return;const j=await r.json();
+async function loadTicker(){if($('land').classList.contains('hide'))return;try{const r=await fetch(API+'/api/ticker');if(!r.ok)return;const j=await r.json();
  const f=n=>n>=1000?n.toLocaleString(undefined,{maximumFractionDigits:0}):n.toFixed(2),pc=i=>(i.change>=0?'+':'')+i.change.toFixed(2)+'%';
  const chip=i=>{const m=META[i.symbol];return `<span class="ti"><b class="ib" style="color:${m[3]};background:${m[4]}">${m[2]}</b><b>${m[0]}</b><span class="mu">$${f(i.price)}</span><b class="${i.change>=0?'w':'l'}">${pc(i)}</b></span>`};
  const half=j.items.map(chip).join('').repeat(3);
