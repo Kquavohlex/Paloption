@@ -94,6 +94,15 @@ app.post('/api/login', authLimiter, wrap(async (req, res) => {
 }));
 
 // ---- app API ----
+let tk = { t: 0, d: null };
+app.get('/api/ticker', rateLimit({ windowMs: 60000, max: 60 }), wrap(async (_req, res) => {
+  if (!tk.d || Date.now() - tk.t > 4000) {
+    const r = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=' + encodeURIComponent(JSON.stringify(SYMBOLS)));
+    if (!r.ok) throw new Error('feed');
+    tk = { t: Date.now(), d: (await r.json()).map(x => ({ symbol: x.symbol, price: Number(x.lastPrice), change: Number(x.priceChangePercent) })) };
+  }
+  res.json({ items: tk.d });
+}));
 app.get('/api/config', (_req, res) => res.json({ symbols: SYMBOLS, durations: DURATIONS, payout: PAYOUT, minStake: MIN_STAKE, maxStake: MAX_STAKE }));
 app.get('/api/me', auth, wrap(async (req, res) => {
   const b = (await pool.query("SELECT balance FROM wallets WHERE user_id=$1 AND kind='demo'", [req.user.id])).rows[0];
