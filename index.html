@@ -32,17 +32,54 @@ input:focus,select:focus,button:focus-visible{outline:2px solid var(--pri);outli
 h2{font-size:17px;margin:24px 0 8px}.t{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
 .t small{color:var(--mut)}.w{color:var(--up);font-weight:700}.l{color:var(--dn);font-weight:700}.note{color:var(--mut);font-size:13px;margin-top:20px}
 .hide{display:none}
+
+[data-theme=light]{--bg:#f6f5fb;--card:#fff;--field:#fff;--line:#e0dcf0;--tx:#1a1530;--mut:#6b6788}
+svg.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.auth{min-height:100dvh;display:flex;flex-direction:column;justify-content:center;padding:56px 20px 40px;max-width:480px;margin:0 auto;position:relative}
+.auth.hide{display:none}
+.th{position:absolute;top:16px;right:16px;background:none;border:0;color:var(--mut);padding:8px;cursor:pointer}
+.lg{display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px;margin-bottom:36px}
+.lg i{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#ec4899);display:grid;place-items:center;color:#fff}
+.auth h1{font-size:30px;font-weight:700;margin:0 0 8px;letter-spacing:-.3px}
+.auth .s{font-size:16px;margin:0 0 28px}
+.auth label{font-weight:600;margin:18px 0 8px}
+.f{position:relative}.f .ic{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--mut);pointer-events:none}
+.f input{padding:0 48px;height:46px;border-radius:16px;background:transparent}
+.eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--mut);padding:4px;cursor:pointer;display:grid}
+.rw{display:flex;justify-content:space-between;align-items:center;margin-top:20px;gap:12px}
+.rw.hide,.auth .hide{display:none}
+.auth label.chk{display:flex;align-items:center;gap:12px;color:var(--mut);font-weight:400;font-size:15px;margin:0}
+.chk input{appearance:none;-webkit-appearance:none;flex:none;width:20px;height:20px;padding:0;border-radius:5px;background:#fff;border:0}
+.chk input:checked{background:#7c3aed;box-shadow:inset 0 0 0 4px #fff}
+.auth a{color:#8b5cf6;font-weight:600;cursor:pointer}
+.auth .btn{display:flex;align-items:center;justify-content:center;gap:10px;height:48px;padding:0;border-radius:16px;margin-top:22px}
+.auth .sw{margin-top:28px}
 </style></head><body>
-<div id="auth" class="wrap">
-  <div class="logo"><i>↗</i>TradePal</div>
+<svg style="display:none"><defs>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-eyeoff" viewBox="0 0 24 24"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.53 13.53 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+<symbol id="i-trend" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></symbol>
+</defs></svg>
+<div id="auth" class="auth">
+  <button class="th" id="th" aria-label="Toggle theme"><svg class="i" width="22" height="22" viewBox="0 0 24 24"><use href="#i-sun"/></svg></button>
+  <div class="lg"><i><svg class="i" width="20" height="20" viewBox="0 0 24 24"><use href="#i-trend"/></svg></i>TradePal</div>
   <h1 id="at">Welcome back</h1><p class="s" id="as">Sign in to your account to continue</p>
-  <div id="nm" class="hide"><label for="name">Full name</label><input id="name" autocomplete="name" placeholder="John Doe"></div>
-  <label for="email">Email</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com">
-  <label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" placeholder="Min 8 characters">
+  <div id="nm" class="hide"><label for="name">Full Name</label><div class="f"><svg class="i ic" width="20" height="20" viewBox="0 0 24 24"><use href="#i-user"/></svg><input id="name" type="text" autocomplete="name" placeholder="John Doe"></div></div>
+  <label for="email">Email</label><div class="f"><svg class="i ic" width="20" height="20" viewBox="0 0 24 24"><use href="#i-mail"/></svg><input id="email" type="email" autocomplete="email" placeholder="you@example.com"></div>
+  <label for="pw">Password</label><div class="f"><svg class="i ic" width="20" height="20" viewBox="0 0 24 24"><use href="#i-lock"/></svg><input id="pw" type="password" autocomplete="current-password" placeholder="Enter your password"><button type="button" class="eye" data-t="pw" aria-label="Show password"><svg class="i" width="20" height="20" viewBox="0 0 24 24"><use href="#i-eye"/></svg></button></div>
+  <div id="cf" class="hide"><label for="pw2">Confirm Password</label><div class="f"><svg class="i ic" width="20" height="20" viewBox="0 0 24 24"><use href="#i-lock"/></svg><input id="pw2" type="password" autocomplete="new-password" placeholder="Repeat your password"></div></div>
+  <div class="rw" id="rm"><label class="chk"><input type="checkbox" id="rem">Remember me</label><a id="fg">Forgot password?</a></div>
+  <div class="rw hide" id="tm"><label class="chk"><input type="checkbox" id="terms"><span>I agree to the <a data-x>Terms of Service</a> and <a data-x>Privacy Policy</a></span></label></div>
   <div class="err" id="err" role="alert"></div>
-  <button class="btn" id="go">Sign in</button>
+  <button class="btn" id="go"><span id="gt">Sign In</span><svg class="i" width="20" height="20" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></button>
   <div class="sw"><span id="sq">Don't have an account?</span> <a id="tg">Create account</a></div>
-  <p class="note">Demo platform with virtual funds only. No real money is deposited, traded or withdrawn.</p>
+  <p class="note" style="text-align:center">Demo platform with virtual funds only.</p>
 </div>
 <div id="app" class="hide">
   <div class="top"><div class="bal"><small>Demo</small><span id="bal">$0.00</span></div><div><button class="ghost" id="rs">Reset demo</button> <button class="ghost" id="lo">Log out</button></div></div>
@@ -59,13 +96,25 @@ h2{font-size:17px;margin:24px 0 8px}.t{background:var(--card);border:1px solid v
   </div>
 </div>
 <script>
-const $=id=>document.getElementById(id);let tok=localStorage.tp,mode='login',cfg,sym,dur=60,pts=[],trades=[];
+const $=id=>document.getElementById(id);let tok=localStorage.tp||sessionStorage.tp,mode='login',cfg,sym,dur=60,pts=[],trades=[];
 const money=n=>'$'+Number(n).toFixed(2);
 async function api(p,o={}){const r=await fetch('/api'+p,{...o,headers:{'Content-Type':'application/json',...(tok?{Authorization:'Bearer '+tok}:{})},body:o.body?JSON.stringify(o.body):undefined});const j=await r.json().catch(()=>({}));if(r.status===401&&tok&&p!=='/login'){out();}if(!r.ok)throw new Error(j.error||'Request failed');return j}
-function setMode(m){mode=m;const r=m==='register';$('at').textContent=r?'Create account':'Welcome back';$('as').textContent=r?'Fill in your details to get started':'Sign in to your account to continue';$('nm').classList.toggle('hide',!r);$('go').textContent=r?'Create account':'Sign in';$('sq').textContent=r?'Already have an account?':"Don't have an account?";$('tg').textContent=r?'Sign in':'Create account';$('err').textContent=''}
+function setMode(m){mode=m;const r=m==='register';
+ $('at').textContent=r?'Create account':'Welcome back';
+ $('as').textContent=r?'Fill in your details to get started':'Sign in to your account to continue';
+ ['nm','cf','tm'].forEach(i=>$(i).classList.toggle('hide',!r));$('rm').classList.toggle('hide',r);
+ $('pw').placeholder=r?'Min 8 characters':'Enter your password';$('pw').autocomplete=r?'new-password':'current-password';
+ $('gt').textContent=r?'Create Account':'Sign In';$('sq').textContent=r?'Already have an account?':"Don't have an account?";$('tg').textContent=r?'Sign in':'Create account';$('err').textContent=''}
 $('tg').onclick=()=>setMode(mode==='login'?'register':'login');
-$('go').onclick=async()=>{$('go').disabled=true;$('err').textContent='';try{const j=await api('/'+mode,{method:'POST',body:{name:$('name').value,email:$('email').value,password:$('pw').value}});tok=j.token;localStorage.tp=tok;start()}catch(e){$('err').textContent=e.message}$('go').disabled=false};
-function out(){localStorage.removeItem('tp');tok=null;location.reload()}$('lo').onclick=out;
+document.querySelectorAll('.eye').forEach(b=>b.onclick=()=>{const i=$(b.dataset.t),h=i.type==='password';i.type=h?'text':'password';b.firstChild.firstChild.setAttribute('href',h?'#i-eyeoff':'#i-eye')});
+$('fg').onclick=()=>{$('err').textContent="Password reset isn't available in this demo yet."};
+document.querySelectorAll('[data-x]').forEach(a=>a.onclick=e=>{e.preventDefault();$('err').textContent='Terms and privacy pages are not published yet.'});
+$('th').onclick=()=>{const l=document.documentElement.dataset.theme!=='light';document.documentElement.dataset.theme=l?'light':'';$('th').firstChild.firstChild.setAttribute('href',l?'#i-moon':'#i-sun')};
+document.querySelectorAll('#auth input').forEach(i=>i.onkeydown=e=>{if(e.key==='Enter')$('go').click()});
+$('go').onclick=async()=>{$('err').textContent='';
+ if(mode==='register'){if($('pw').value!==$('pw2').value){$('err').textContent='Passwords do not match';return}if(!$('terms').checked){$('err').textContent='Please accept the Terms of Service and Privacy Policy';return}}
+ $('go').disabled=true;try{const j=await api('/'+mode,{method:'POST',body:{name:$('name').value,email:$('email').value,password:$('pw').value}});tok=j.token;(mode==='register'||$('rem').checked?localStorage:sessionStorage).tp=tok;start()}catch(e){$('err').textContent=e.message}$('go').disabled=false};
+function out(){localStorage.removeItem('tp');sessionStorage.removeItem('tp');tok=null;location.reload()}$('lo').onclick=out;
 async function start(){cfg=await api('/config');$('auth').classList.add('hide');$('app').classList.remove('hide');
   $('sym').innerHTML=cfg.symbols.map(s=>`<option>${s}</option>`).join('');sym=cfg.symbols[0];
   $('dur').innerHTML=cfg.durations.map(d=>`<button class="chip${d===dur?' on':''}" data-d="${d}">${d<60?d+'s':d/60+'m'}</button>`).join('');
