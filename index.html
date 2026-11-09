@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>TradePal · Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#14111f;--card:#1e1933;--field:#1a1630;--line:#2b2545;--tx:#fff;--mut:#9a95b4;--pri:#7c3aed;--up:#22c55e;--dn:#ef4444}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 'IBM Plex Sans',system-ui,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.wrap{max-width:480px;margin:0 auto;padding:16px}
+.logo{display:flex;align-items:center;gap:12px;font-weight:700;font-size:22px;margin:40px 0 28px}
+.logo i{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#ec4899);display:grid;place-items:center;font-style:normal}
+h1{font-size:30px;margin:0 0 6px}p.s{color:var(--mut);margin:0 0 24px}
+label{display:block;color:var(--mut);font-weight:500;font-size:14px;margin:16px 0 6px}
+input,select{width:100%;background:var(--field);border:1px solid var(--line);border-radius:14px;color:var(--tx);font:inherit;padding:15px 16px}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.btn{width:100%;border:0;border-radius:14px;background:var(--pri);color:#fff;font:600 17px inherit;font-family:inherit;padding:16px;margin-top:24px;cursor:pointer;box-shadow:0 8px 24px #7c3aed44}
+.btn:disabled{opacity:.5}.err{color:#f87171;min-height:22px;margin-top:12px;font-size:14px}
+.sw{text-align:center;color:var(--mut);margin-top:20px}.sw a{color:#8b5cf6;font-weight:600;cursor:pointer}
+.top{display:flex;align-items:center;justify-content:space-between;background:var(--card);padding:12px 16px;border-bottom:1px solid var(--line)}
+.bal{background:var(--field);border-radius:12px;padding:8px 14px;font-weight:600;color:#a78bfa}.bal small{color:var(--mut);font-weight:500;margin-right:6px}
+.ghost{background:none;border:1px solid var(--line);color:var(--mut);border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer}
+.sel{display:flex;gap:8px;margin:12px 0}.sel select{padding:12px}
+.chart{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px}
+.px{font-size:26px;font-weight:700}.chart canvas{width:100%;height:200px;display:block}
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.chip{background:var(--field);border:1px solid var(--line);color:var(--mut);border-radius:10px;padding:10px 0;text-align:center;font-weight:600;cursor:pointer;font-family:inherit;font-size:15px}
+.chip.on{border-color:var(--pri);color:#a78bfa;background:#2a1f55}
+.stake{display:flex;gap:8px;margin-top:14px;align-items:center}.stake input{text-align:center;font-size:24px;font-weight:700}
+.go{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.go button{border:0;border-radius:16px;padding:18px 16px;color:#fff;font:700 22px inherit;font-family:inherit;text-align:left;cursor:pointer}
+.go small{display:block;font-weight:500;font-size:14px;opacity:.9}.u{background:var(--up)}.d{background:var(--dn)}
+h2{font-size:17px;margin:24px 0 8px}.t{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.t small{color:var(--mut)}.w{color:var(--up);font-weight:700}.l{color:var(--dn);font-weight:700}.note{color:var(--mut);font-size:13px;margin-top:20px}
+.hide{display:none}
+</style></head><body>
+<div id="auth" class="wrap">
+  <div class="logo"><i>↗</i>TradePal</div>
+  <h1 id="at">Welcome back</h1><p class="s" id="as">Sign in to your account to continue</p>
+  <div id="nm" class="hide"><label for="name">Full name</label><input id="name" autocomplete="name" placeholder="John Doe"></div>
+  <label for="email">Email</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+  <label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" placeholder="Min 8 characters">
+  <div class="err" id="err" role="alert"></div>
+  <button class="btn" id="go">Sign in</button>
+  <div class="sw"><span id="sq">Don't have an account?</span> <a id="tg">Create account</a></div>
+  <p class="note">Demo platform with virtual funds only. No real money is deposited, traded or withdrawn.</p>
+</div>
+<div id="app" class="hide">
+  <div class="top"><div class="bal"><small>Demo</small><span id="bal">$0.00</span></div><div><button class="ghost" id="rs">Reset demo</button> <button class="ghost" id="lo">Log out</button></div></div>
+  <div class="wrap">
+    <div class="sel"><select id="sym" aria-label="Asset"></select></div>
+    <div class="chart"><div class="px" id="px">—</div><canvas id="cv" width="440" height="200"></canvas></div>
+    <div class="row" id="dur" aria-label="Duration"></div>
+    <div class="stake"><button class="chip" id="m" style="width:56px">−</button><input id="st" type="number" inputmode="decimal" value="10" min="1" max="1000"><button class="chip" id="p" style="width:56px">+</button></div>
+    <div class="go"><button class="u" id="up">Up<small id="pu"></small></button><button class="d" id="dn">Down<small id="pd"></small></button></div>
+    <div class="err" id="terr" role="alert"></div>
+    <h2>Open trades</h2><div id="open"></div>
+    <h2>History</h2><div id="hist"></div>
+    <p class="note">Virtual funds only. Prices come from a live market feed; trades settle on the server at expiry. Past results don't predict future ones.</p>
+  </div>
+</div>
+<script>
+const $=id=>document.getElementById(id);let tok=localStorage.tp,mode='login',cfg,sym,dur=60,pts=[],trades=[];
+const money=n=>'$'+Number(n).toFixed(2);
+async function api(p,o={}){const r=await fetch('/api'+p,{...o,headers:{'Content-Type':'application/json',...(tok?{Authorization:'Bearer '+tok}:{})},body:o.body?JSON.stringify(o.body):undefined});const j=await r.json().catch(()=>({}));if(r.status===401&&tok&&p!=='/login'){out();}if(!r.ok)throw new Error(j.error||'Request failed');return j}
+function setMode(m){mode=m;const r=m==='register';$('at').textContent=r?'Create account':'Welcome back';$('as').textContent=r?'Fill in your details to get started':'Sign in to your account to continue';$('nm').classList.toggle('hide',!r);$('go').textContent=r?'Create account':'Sign in';$('sq').textContent=r?'Already have an account?':"Don't have an account?";$('tg').textContent=r?'Sign in':'Create account';$('err').textContent=''}
+$('tg').onclick=()=>setMode(mode==='login'?'register':'login');
+$('go').onclick=async()=>{$('go').disabled=true;$('err').textContent='';try{const j=await api('/'+mode,{method:'POST',body:{name:$('name').value,email:$('email').value,password:$('pw').value}});tok=j.token;localStorage.tp=tok;start()}catch(e){$('err').textContent=e.message}$('go').disabled=false};
+function out(){localStorage.removeItem('tp');tok=null;location.reload()}$('lo').onclick=out;
+async function start(){cfg=await api('/config');$('auth').classList.add('hide');$('app').classList.remove('hide');
+  $('sym').innerHTML=cfg.symbols.map(s=>`<option>${s}</option>`).join('');sym=cfg.symbols[0];
+  $('dur').innerHTML=cfg.durations.map(d=>`<button class="chip${d===dur?' on':''}" data-d="${d}">${d<60?d+'s':d/60+'m'}</button>`).join('');
+  [...$('dur').children].forEach(b=>b.onclick=()=>{dur=+b.dataset.d;[...$('dur').children].forEach(x=>x.classList.toggle('on',x===b))});
+  $('sym').onchange=e=>{sym=e.target.value;pts=[]};upd();me();loadTrades();tick();setInterval(tick,1000);setInterval(loadTrades,2000);setInterval(render,500)}
+async function me(){try{const j=await api('/me');$('bal').textContent=money(j.demoBalance)}catch{}}
+async function tick(){try{const j=await api('/price/'+sym);pts.push(j.price);if(pts.length>90)pts.shift();$('px').textContent=j.price.toLocaleString(undefined,{minimumFractionDigits:2});draw()}catch{}}
+function draw(){const c=$('cv'),x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);if(pts.length<2)return;const mn=Math.min(...pts),mx=Math.max(...pts),r=(mx-mn)||1;
+  x.strokeStyle='#e5e1f5';x.lineWidth=2;x.beginPath();pts.forEach((p,i)=>{const X=i/(90-1)*c.width,Y=c.height-10-(p-mn)/r*(c.height-20);i?x.lineTo(X,Y):x.moveTo(X,Y)});x.stroke()}
+function upd(){const s=+$('st').value||0,pr=(s*cfg.payout).toFixed(2);$('pu').textContent=$('pd').textContent=`Win +$${pr} (${cfg.payout*100}%)`}
+$('st').oninput=upd;$('m').onclick=()=>{$('st').value=Math.max(cfg.minStake,(+$('st').value||0)-5);upd()};$('p').onclick=()=>{$('st').value=Math.min(cfg.maxStake,(+$('st').value||0)+5);upd()};
+async function place(d){$('terr').textContent='';try{const j=await api('/trades',{method:'POST',body:{symbol:sym,direction:d,duration:dur,stake:+$('st').value}});$('bal').textContent=money(j.demoBalance);loadTrades()}catch(e){$('terr').textContent=e.message}}
+$('up').onclick=()=>place('up');$('dn').onclick=()=>place('down');
+$('rs').onclick=async()=>{try{const j=await api('/demo/reset',{method:'POST'});$('bal').textContent=money(j.demoBalance);$('terr').textContent=''}catch(e){$('terr').textContent=e.message}};
+async function loadTrades(){try{const j=await api('/trades');trades=j.trades;$('bal').textContent=money(j.demoBalance);render()}catch{}}
+function render(){const now=Date.now();const o=trades.filter(t=>t.status==='open'),h=trades.filter(t=>t.status!=='open');
+  $('open').innerHTML=o.map(t=>{const s=Math.max(0,Math.ceil((new Date(t.expires_at)-now)/1000));return `<div class="t"><div><b>${t.symbol}</b> ${t.direction.toUpperCase()}<br><small>Entry ${Number(t.entry_price)} · ${money(t.stake)}</small></div><b>${s}s</b></div>`}).join('')||'<div class="note">No open trades.</div>';
+  $('hist').innerHTML=h.map(t=>`<div class="t"><div><b>${t.symbol}</b> ${t.direction.toUpperCase()}<br><small>${Number(t.entry_price)} → ${Number(t.exit_price)}</small></div><span class="${t.outcome==='win'?'w':t.outcome==='loss'?'l':''}">${t.pnl>0?'+':''}${money(t.pnl)}</span></div>`).join('')||'<div class="note">Settled trades appear here.</div>'}
+if(tok)start().catch(out);
+</script></body></html>
