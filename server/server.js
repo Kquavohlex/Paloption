@@ -13,6 +13,17 @@ const app = express();
 app.set('trust proxy', 1);
 app.use(helmet({ contentSecurityPolicy: false })); // inline script in public/index.html; tighten with nonces before launch
 app.use(express.json({ limit: '10kb' }));
+const ORIGINS = (process.env.CORS_ORIGIN || '').split(',').map(x => x.trim()).filter(Boolean);
+app.use('/api', (req, res, next) => {
+  const o = req.headers.origin;
+  if (o && (!ORIGINS.length || ORIGINS.includes(o))) {
+    res.setHeader('Access-Control-Allow-Origin', o); res.setHeader('Vary', 'Origin');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  }
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
 app.use(express.static('public'));
 
 // ---- price feed (server-side only; Binance public ticker) ----
